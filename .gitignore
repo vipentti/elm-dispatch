@@ -1,0 +1,8 @@
+elm-stuff
+.*.sw?
+*~
+elm.js
+index.html
+docs.json
+documentation.json
+.vscode/
