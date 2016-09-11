@@ -2,15 +2,12 @@ module FancyButton
   exposing
     ( Msg
     , Model
-    , Property
+    , Handler
     , model
     , update
     , view
-    , clickCount
-    , any
-    , on
-    , on1
-    , onClick
+    , onMouseEnter
+    , onMouseLeave
     )
 
 import Html exposing (..)
@@ -24,8 +21,8 @@ import Json.Decode as Json
  -}
 type Model
   = Model
-      { focused : Bool
-      , clickCount : Int
+      { hovered : Bool
+      , hoverCount : Int
       }
 
 {-| Initialize the model
@@ -33,57 +30,29 @@ type Model
 model : Model
 model =
   Model
-    { focused = False
-    , clickCount = 0
+    { hovered = False
+    , hoverCount = 0
     }
 
 
-{-| Utility function to access some internal state
+-- Options
+
+{-| An event handler for FancyButton
  -}
-clickCount : Model -> Int
-clickCount (Model { clickCount }) =
-  clickCount
+type Handler msg
+  = Handler String (Json.Decoder msg)
 
-
-
--- Properties
-
-{-| FancyButton only accepts specific
-types of properties
+{-|
  -}
-type Property msg
-  = Decoder String (Json.Decoder msg)
-  | Any (Html.Attribute msg)
+onMouseEnter : msg -> Handler msg
+onMouseEnter msg =
+  Handler "mouseenter" (Json.succeed msg)
 
-
-{-| Add an `Html.Event` handler
+{-|
  -}
-on : String -> Json.Decoder msg -> Property msg
-on =
-  Decoder
-
-
-{-| Add an `Html.Event` handler.
-
-Equivalent to `FancyButton.on "event" (Json.succeed msg)`
- -}
-on1 : String -> msg -> Property msg
-on1 evt msg =
-  on evt (Json.succeed msg)
-
-
-{-| Add an onClick handler.
- -}
-onClick : msg -> Property msg
-onClick msg =
-  on1 "click" msg
-
-
-{-| Map from Html.Attribute to a FancyButton.Property
- -}
-any : Html.Attribute msg -> Property msg
-any =
-  Any
+onMouseLeave : msg -> Handler msg
+onMouseLeave msg =
+  Handler "mouseleave" (Json.succeed msg)
 
 
 
@@ -91,85 +60,63 @@ any =
 
 
 type Msg msg
-  = Click
-  | Focus
-  | Blur
-    {- This message tells Dispatch how to
-    convert a list of messages to a single message
+  = Hover
+  | Leave
+    {- Batch a list of messages for `Dispatch`
      -}
-  | Dispatch (List msg)
+  | Batch (List msg)
 
 
 update : Msg msg -> Model -> ( Model, Cmd msg )
 update msg (Model model) =
   case msg of
-    {- Forward all the messages produced by handlers with multiple decoders
-       attached to them
+    {- Forward all the messages produced by event-handlers
+    with multiple decoders attached to them
     -}
-    Dispatch msg' ->
+    Batch msg' ->
       Model model ! [ Dispatch.forward msg' ]
 
-    Click ->
-      Model { model | clickCount = model.clickCount + 1 } ! []
+    Hover ->
+      Model { model | hovered = True
+            , hoverCount = model.hoverCount + 1 }
+            ! []
 
-    Focus ->
-      Model { model | focused = True } ! []
-
-    Blur ->
-      Model { model | focused = False } ! []
+    Leave ->
+      Model { model | hovered = False } ! []
 
 
 
 -- VIEW
 
 
-view : (Msg msg -> msg) -> Model -> List (Property msg) -> List (Html msg) -> Html msg
-view lift (Model model) props content =
+view : (Msg msg -> msg) -> Model -> List (Handler msg) -> List (Attribute msg) -> List (Html msg) -> Html msg
+view lift (Model model) handlers attributes content =
   let
     {- We want to perform internal actions on these events
- -}
+     -}
     defaultListeners =
-      [ on1 "mouseenter" (lift Focus)
-      , on1 "mouseleave" (lift Blur)
-      , on1 "click" (lift Click)
+      [ onMouseEnter (lift Hover)
+      , onMouseLeave (lift Leave)
       ]
 
-    {- Setup the Dispatch configuration using user provided events as well as
-       our own internal events
+    {- Setup the Dispatch configuration using user-provided event-handlers
+    plus our own internal event-handlers
     -}
     config =
       List.foldl
-        (\prop acc ->
-          case prop of
-            Decoder evt d ->
+        (\handler acc ->
+          case handler of
+            Handler evt d ->
               Dispatch.add evt Nothing d acc
-
-            Any attribute ->
-              acc
         )
-        (Dispatch.setMsg (Dispatch >> lift) Dispatch.defaultConfig)
-        (props ++ defaultListeners)
+        (Dispatch.setMsg (Batch >> lift) Dispatch.defaultConfig)
+        (handlers ++ defaultListeners)
 
-    {- Don't add listeners here,
-       they are already added in the config
-    -}
-    attributes =
-      List.map
-        (\prop ->
-          case prop of
-            Decoder _ _ ->
-              Nothing
-
-            Any a ->
-              Just a
-        )
-        props
-        |> List.filterMap identity
   in
     button
       ([ normal
-       , if model.focused then
-          focused
+       , if model.hovered then
+          hovered model.hoverCount
          else
           style []
        ]
@@ -197,10 +144,24 @@ normal =
     ]
 
 
-focused : Attribute a
-focused =
-  style
-    [ ( "background-color", "#b6d8e4" )
-    , ( "text-shadow", "-1px 1px #27496d" )
-    , ( "outline", "none" )
-    ]
+hovered : Int -> Attribute a
+hovered count =
+  let
+    colors =
+      [ ("background-color", "#b6d8e4")
+      , ("background-color", "#e4a8a8")
+      , ("background-color", "#f6a8e4")
+      ]
+
+    nrColors =
+        List.length colors
+
+    color =
+      List.drop (count % nrColors) colors
+        |> List.head
+        |> Maybe.withDefault ("background-color", "#b6d8e4")
+  in
+    style
+      [ color
+      , ( "outline", "none" )
+      ]
