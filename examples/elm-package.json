@@ -2,7 +2,7 @@
     "version": "1.0.0",
     "summary": "elm-dispatch examples",
     "repository": "https://github.com/vipentti/elm-dispatch.git",
-    "license": "BSD3",
+    "license": "Apache-2.0",
     "source-directories": [
         ".",
         "../src"
