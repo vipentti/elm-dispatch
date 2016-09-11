@@ -7,21 +7,6 @@ import Html.Attributes exposing (style)
 import FancyButton
 
 
-main : Program Never
-main =
-  App.program
-    { init = init
-    , update = update
-    , view = view
-    , subscriptions = always Sub.none
-    }
-
-
-init : ( Model, Cmd Msg )
-init =
-  model ! []
-
-
 type alias Model =
   { button : FancyButton.Model
   , isHovered : Bool
@@ -72,3 +57,18 @@ view model =
     , p []
         [ text "Hover over the button" ]
     ]
+
+
+main : Program Never
+main =
+  App.program
+    { init = init
+    , update = update
+    , view = view
+    , subscriptions = always Sub.none
+    }
+
+
+init : ( Model, Cmd Msg )
+init =
+  model ! []
