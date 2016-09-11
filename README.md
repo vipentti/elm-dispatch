@@ -25,6 +25,6 @@ The library can also been seen in use in [elm-mdl](http://package.elm-lang.org/p
 
 ## License
 
-© Ville Penttinen. Licensed under an
+© Ville Penttinen, 2016. Licensed under an
 [Apache-2.0](https://github.com/vipentti/elm-dispatch/blob/master/LICENSE)
 license.

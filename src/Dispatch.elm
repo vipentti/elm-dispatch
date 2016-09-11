@@ -21,7 +21,10 @@ module Dispatch exposing
 ## Configuration
 
 These are tailored for writing UI component libraries
-with stateful components, such as `elm-mdl`.
+with stateful components, such as `elm-mdl`. These are mostly useful
+only if you want to have an API where users specify
+options as lists of things and we want to accumulate event-handlers
+for various events.
 
 To see how they are used in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) see [collecting the handlers](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm#L70-L73) and [adding them as attributes](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm#L112-L125)
 
