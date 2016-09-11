@@ -21,4 +21,10 @@ elm package install vipentti/elm-dispatch
 
 An example of how to use the library may be found in the `examples/` folder.
 
-The library can also been seen in use in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) specifically [Material.Options.Internal](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm) and [Material.Options](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options.elm)
+The library can also been seen in use in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) specifically [Material.Options.Internal](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm) and [Material.Options](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options.elm). 
+
+## License
+
+© Ville Penttinen. Licensed under an
+[Apache-2.0](https://github.com/vipentti/elm-dispatch/blob/master/LICENSE)
+license.
