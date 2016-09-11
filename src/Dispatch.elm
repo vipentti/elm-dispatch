@@ -6,7 +6,7 @@ module Dispatch exposing
   , forward
   )
 
-{-| Utility module for applying multiple decoders to a single `Html.Event`.
+{-| Dispatch multiple messages in response to a single `Html.Event`.
 
 ## Events
 @docs on

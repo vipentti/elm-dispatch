@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "summary": "Allow for dispatching multiple messages from a single Html event",
+    "summary": "Dispatch multiple messages in response to a single Html.Event.",
     "repository": "https://github.com/vipentti/elm-dispatch.git",
     "license": "BSD3",
     "source-directories": [
