@@ -8,15 +8,15 @@ module Dispatch exposing
 
 {-| Dispatch multiple messages in response to a single `Html.Event`.
 
-## Events
-
-@docs on
-@docs onWithOptions
-
 ## Dispatch
 
 @docs forward
 @docs update
+
+## Events
+
+@docs on
+@docs onWithOptions
 
 ## Configuration
 
