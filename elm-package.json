@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "summary": "Dispatch multiple messages in response to a single Html.Event.",
     "repository": "https://github.com/vipentti/elm-dispatch.git",
     "license": "Apache-2.0",
